@@ -1,139 +1,190 @@
-class IqLogo extends HTMLElement {
-    connectedCallback() {
-        this.attachShadow({ mode: 'open' });
-        this.shadowRoot.innerHTML = `
-            <style>
-                :host {
-                    display: inline-block;
-                    line-height: 1; /* Normalize spacing */
-                }
+class IQLogo extends HTMLElement {
+  constructor() {
+    super();
+    // Attach a shadow DOM for encapsulation
+    this.attachShadow({ mode: 'open' });
+  }
 
-                .logo-wrapper {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 16px;
-                    padding: 10px 20px;
-                    background: rgba(255, 255, 255, 0.02); /* Very subtle dark mode background */
-                    border: 1px solid rgba(255, 255, 255, 0.05); /* Very subtle dark mode border */
-                    border-radius: 12px;
-                    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-                }
+  connectedCallback() {
+    this.shadowRoot.innerHTML = `
+      <style>
+        :host {
+          display: inline-block;
+          width: var(--logo-size, 120px);
+          height: var(--logo-size, 120px);
+          font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+          cursor: pointer;
+          user-select: none;
+        }
 
-                /* Container for the graphical icon */
-                .logo-mark {
-                    position: relative;
-                    width: 48px;  /* Icon size */
-                    height: 48px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                }
+        .logo-container {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          perspective: 1000px;
+        }
 
-                /* The technology sphere: A dashed outer shell indicating a network */
-                .tech-sphere {
-                    position: absolute;
-                    width: 100%;
-                    height: 100%;
-                    border: 1.5px dashed rgba(6, 182, 212, 0.4); /* Subtle teal dash */
-                    border-radius: 50%; /* Perfect circle */
-                    animation: subtleRotate 12s linear infinite; /* Slow rotation */
-                }
+        /* Animated glowing background rings simulating synaptic/brain activity */
+        .ring {
+          position: absolute;
+          border: 2px solid transparent;
+          border-radius: 50%;
+          animation: spin linear infinite;
+        }
 
-                /* The neural network paths: A glowing, organic mesh in the background */
-                .neural-network {
-                    position: absolute;
-                    width: 85%;
-                    height: 85%;
-                    opacity: 0.15; /* Transparent background texture */
-                    /* Using an SVG background for the complex network texture */
-                    background-image: url("data:image/svg+xml,%3Csvg width='44' height='44' viewBox='0 0 44 44' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.4' fill-rule='evenodd'%3E%3Ccircle cx='22' cy='22' r='1'/%3E%3Cpath d='M22 23c-1.105 0-2-1.343-2-3s.895-3 2-3 2 1.343 2 3-.895 3-2 3zM6 15.111C6 11.736 7.791 9 10 9s4 2.736 4 6.111S12.209 21.222 10 21.222s-4-2.736-4-6.111zM10 26c-1.105 0-2-1.343-2-3s.895-3 2-3 2 1.343 2 3-.895 3-2 3zm34-10.889c0-3.375-1.791-6.111-4-6.111s-4 2.736-4 6.111S38.209 21.222 40 21.222s4-2.736 4-6.111zM40 26c-1.105 0-2-1.343-2-3s.895-3 2-3 2 1.343 2 3-.895 3-2 3z'/%3E%3C/g%3E%3C/svg%3E");
-                    background-size: contain;
-                    mask-image: radial-gradient(white 40%, transparent 80%);
-                }
+        .ring-outer {
+          width: 95%;
+          height: 95%;
+          border-top-color: #3b82f6; /* Modern Blue */
+          border-bottom-color: #8b5cf6; /* Modern Purple */
+          animation-duration: 4s;
+          opacity: 0.8;
+        }
 
-                /* The core brain symbol: Glowing teal nodes in a neural formation */
-                .neural-core {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    gap: 3px;
-                    z-index: 1; /* Sit above the sphere/network */
-                }
+        .ring-inner {
+          width: 80%;
+          height: 80%;
+          border-left-color: #06b6d4; /* Bright Cyan */
+          border-right-color: #ec4899; /* Vibrant Pink */
+          animation-duration: 3s;
+          animation-direction: reverse;
+          opacity: 0.6;
+        }
 
-                /* Central pulsing node representing consciousness/intelligence */
-                .core-node {
-                    width: 14px;
-                    height: 14px;
-                    background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); /* Bright Teal Gradient */
-                    border-radius: 50%;
-                    box-shadow: 0 0 20px #06b6d4; /* Vibrant glow */
-                    animation: pulse 3s infinite;
-                }
+        /* Core Orb representing intelligence/focus */
+        .core-orb {
+          position: absolute;
+          width: 55%;
+          height: 55%;
+          background: radial-gradient(circle, #2563eb, #1d4ed8);
+          border-radius: 50%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 0 20px rgba(37, 99, 235, 0.6);
+          transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+          z-index: 2;
+        }
 
-                /* Peripheral nodes forming the 'IQ' neural cluster */
-                .neural-core span:not(.core-node) {
-                    width: 6px;
-                    height: 6px;
-                    background: #06b6d4;
-                    opacity: 0.8;
-                    border-radius: 50%;
-                }
+        /* Text Styling */
+        .text-iq {
+          color: #ffffff;
+          font-weight: 800;
+          font-size: calc(var(--logo-size, 120px) * 0.22);
+          line-height: 1;
+          letter-spacing: 1px;
+          text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
 
-                /* Layout for the text portion */
-                .logo-text {
-                    display: flex;
-                    flex-direction: column;
-                }
+        .text-classes {
+          color: #93c5fd;
+          font-weight: 600;
+          font-size: calc(var(--logo-size, 120px) * 0.08);
+          text-transform: uppercase;
+          letter-spacing: 2px;
+          margin-top: 2px;
+        }
 
-                /* "IQ CLASSES" title styling */
-                .main-title {
-                    font-size: 24px;
-                    font-weight: 800; /* Extra bold */
-                    color: #ffffff; /* White text for contrast */
-                    letter-spacing: -0.5px;
-                }
+        /* Interactive Hover Effects */
+        .logo-container:hover .core-orb {
+          transform: scale(1.12) rotateY(10deg);
+          box-shadow: 0 0 30px rgba(139, 92, 246, 0.8);
+          background: radial-gradient(circle, #4f46e5, #3730a3);
+        }
 
-                /* "IQ" specific highlighting */
-                .main-title .iq-highlight {
-                    background: linear-gradient(135deg, #06b6d4, #22d3ee); /* Brighter Teal Gradient */
-                    -webkit-background-clip: text;
-                    -webkit-text-fill-color: transparent;
-                    font-weight: 900;
-                }
+        .logo-container:hover .ring-outer {
+          animation-duration: 1.5s;
+          filter: drop-shadow(0 0 8px #8b5cf6);
+        }
 
-                /* "CLASSES" styling (regular bold, slightly brighter than white) */
-                .main-title .classes-text {
-                    color: #f1f5f9;
-                }
+        .logo-container:hover .ring-inner {
+          animation-duration: 1s;
+          filter: drop-shadow(0 0 8px #06b6d4);
+        }
 
-                /* Keyframe Animation: Subtle, slow rotation of the outer network */
-                @keyframes subtleRotate {
-                    0% { transform: rotate(0deg); }
-                    100% { transform: rotate(360deg); }
-                }
+        /* Floating spark animations for cognitive spark theme */
+        .spark {
+          position: absolute;
+          width: 4px;
+          height: 4px;
+          background-color: #fff;
+          border-radius: 50%;
+          opacity: 0;
+          pointer-events: none;
+        }
 
-                /* Keyframe Animation: Pulse effect for the central intelligence node */
-                @keyframes pulse {
-                    0% { transform: scale(1); box-shadow: 0 0 16px rgba(6, 182, 212, 0.7); }
-                    50% { transform: scale(1.05); box-shadow: 0 0 24px rgba(34, 211, 238, 0.9); }
-                    100% { transform: scale(1); box-shadow: 0 0 16px rgba(6, 182, 212, 0.7); }
-                }
-            </style>
+        /* Keyframe Animations */
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      </style>
 
-            <div class="logo-wrapper">
-                <div class="logo-mark" aria-hidden="true">
-                    <div class="neural-network"></div> <div class="tech-sphere"></div>       <div class="neural-core">             <span class="core-node"></span>   <span></span>                     <span></span>                     </div>
-                </div>
+      <div class="logo-container">
+        <div class="ring ring-outer"></div>
+        <div class="ring ring-inner"></div>
+        <div class="core-orb">
+          <span class="text-iq">IQ</span>
+          <span class="text-classes">Classes</span>
+        </div>
+      </div>
+    `;
 
-                <div class="logo-text">
-                    <h1 class="main-title">
-                        <span class="iq-highlight">IQ</span> <span class="classes-text">CLASSES</span>
-                    </h1>
-                </div>
-            </div>
-        `;
+    this.setupInteractivity();
+  }
+
+  // Interactive JavaScript Sparkle Effect on Click
+  setupInteractivity() {
+    const container = this.shadowRoot.querySelector('.logo-container');
+    
+    container.addEventListener('click', (e) => {
+      this.createSparks();
+    });
+  }
+
+  createSparks() {
+    const container = this.shadowRoot.querySelector('.logo-container');
+    const sparkCount = 8;
+
+    for (let i = 0; i < sparkCount; i++) {
+      const spark = document.createElement('div');
+      spark.classList.add('spark');
+      container.appendChild(spark);
+
+      const angle = (i / sparkCount) * 2 * Math.PI;
+      const velocity = 30 + Math.random() * 30; // Distance to travel
+      const destinationX = Math.cos(angle) * velocity;
+      const destinationY = Math.sin(angle) * velocity;
+
+      // Set initial position at center
+      spark.style.left = '50%';
+      spark.style.top = '50%';
+      spark.style.transform = 'translate(-50%, -50%)';
+
+      const animation = spark.animate([
+        { 
+          transform: 'translate(-50%, -50%) scale(1)', 
+          opacity: 1,
+          backgroundColor: '#06b6d4'
+        },
+        { 
+          transform: `translate(calc(-50% + ${destinationX}px), calc(-50% + ${destinationY}px)) scale(0)`, 
+          opacity: 0,
+          backgroundColor: '#8b5cf6'
+        }
+      ], {
+        duration: 800,
+        easing: 'cubic-bezier(0.25, 1, 0.5, 1)'
+      });
+
+      animation.onfinish = () => spark.remove();
     }
+  }
 }
 
-// Define the new custom element 'iq-logo'
-customElements.define('iq-logo', IqLogo);
+// Define the custom element so the browser recognizes <iq-logo>
+customElements.define('iq-logo', IQLogo);
