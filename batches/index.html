@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IQ Classes | Batch Info</title>
+    <title>IQ Classes | Elevating Minds, Shaping Futures</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://iqclasses.github.io/scripts/logo.js" defer></script>
@@ -20,7 +20,7 @@
     <header class="sticky top-0 z-50 bg-[#0F172A] text-white shadow-xl backdrop-blur-md bg-opacity-95">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
-                <a href="#" class="flex items-center gap-2">
+                <a href="https://iqclasses.github.io" class="flex items-center gap-2">
                     <iq-logo class="w-12 h-12"></iq-logo>
                     <span class="font-bold text-xl tracking-wider text-white hidden sm:block">IQ <span class="text-[#6366F1]">CLASSES</span></span>
                 </a>
@@ -207,8 +207,10 @@
     </footer>
 
     <script>
+        // Load Lucide Icons
         lucide.createIcons();
 
+        // Responsive Hamburger Toggler
         const menuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
         const menuIcon = document.getElementById('menu-icon');
@@ -222,7 +224,7 @@
                 mobileMenu.classList.add('hidden');
                 menuIcon.setAttribute('data-lucide', 'menu');
             }
-            lucide.createIcons();
+            lucide.createIcons(); // refresh internal vector nodes
         });
     </script>
 </body>
