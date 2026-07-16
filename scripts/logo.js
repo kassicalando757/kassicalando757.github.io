@@ -1,7 +1,3 @@
-// Save this file as 'logo.js' on your GitHub Pages
-// To use, add this script tag to your HTML: <script src="path/to/logo.js"></script>
-// Then add the custom element: <iq-logo></iq-logo>
-
 class IqLogo extends HTMLElement {
     connectedCallback() {
         this.attachShadow({ mode: 'open' });
